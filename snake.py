@@ -1,21 +1,17 @@
 import pygame, random
 
-
 # Initialize pygame
 pygame.init()
-
 
 # Set display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
-display_surface =  pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("~~Snake~~")
-
 
 # Set FSP and clock
 FSP = 20
 clock = pygame.time.Clock()
-
 
 # Set game values
 SNAKE_SIZE = 20
@@ -25,14 +21,12 @@ snake_dx = 0
 snake_dy = 0
 score = 0
 
-
 # Set colors
 GREEN = (0, 255, 0)
-RED = (255, 0 ,0)
+RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 DARKGREEN = (10, 50, 10)
 DARKRED = (150, 0, 0)
-
 
 # Set fonts
 font = pygame.font.SysFont('gabriola', 48)
@@ -53,14 +47,18 @@ def create_text_and_rect(text, color, background_color, **locations):
 title_text, text_rect = create_text_and_rect("~~Snake~~", GREEN, DARKRED,
                                              center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
 
-score_text, score_rect = create_text_and_rect("Score:" + str(score), GREEN, DARKRED, topleft=(10, 10))
-game_over_text, game_over_rect = create_text_and_rect("GAMEOVER",RED, DARKGREEN, center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)),
-continue_text, continue_rect = create_text_and_rect("Press any key to play again", RED, DARKGREEN, center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64)),
+score_text, score_rect = create_text_and_rect("Score:" + str(score),
+                                              GREEN,
+                                              DARKRED,
+                                              topleft=(10, 10))
 
+a, game_over_rect = create_text_and_rect("GAMEOVER", RED, DARKGREEN, center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+
+continue_text, continue_rect = create_text_and_rect("Press any key to play again", RED, DARKGREEN,
+                                                    center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64))
 
 # Set sounds and music
 pick_up_sound = pygame.mixer.Sound("pick_up_sound.wav")
-
 
 # Set images (in this case, use simple rects...so just create their coordinates)
 # For a rectangle you need (top-left x, top-left y, width, height)
@@ -68,8 +66,8 @@ apple_coord = (500, 500, SNAKE_SIZE, SNAKE_SIZE)
 apple_rect = pygame.draw.rect(display_surface, RED, apple_coord)
 head_coord = (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
 head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
-body_coords
 
+body_coords = []
 
 # The main game loop
 running = True
@@ -114,7 +112,7 @@ def handle_snake():
     global head_coord
     global snake_dx, snake_dy
 
-    body_coords.insert( 0, head_coord)
+    body_coords.insert(0, head_coord)
     body_coords.pop()
     head_x += snake_dx
     head_y += snake_dy
@@ -123,7 +121,7 @@ def handle_snake():
 
 def reset_game_after_game_over(event):
     global is_paused, score, head_x, head_y, head_coord, body_coords, snake_dx, snake_dy
-    if event.type ==  pygame.KEYDOWN:
+    if event.type == pygame.KEYDOWN:
         score = 0
         head_x = WINDOW_WIDTH // 2
         head_y = WINDOW_HEIGHT // 2 + 100
@@ -148,7 +146,7 @@ def check_game_over():
     global body_coords
     global running
     global is_paused
-    if (head_rect.left <0 or head_rect.right > WINDOW_WIDTH or head_rect.top <0 or head_rect.bottom > WINDOW_HEIGHT or head_coord in body_coords):
+    if head_rect.left < 0 or head_rect.right > WINDOW_WIDTH or head_rect.top < 0 or head_rect.bottom > WINDOW_HEIGHT or head_coord in body_coords:
         display_surface.blit(game_over_text, game_over_rect)
         display_surface.blit(continue_text, continue_rect)
         pygame.display.update()
