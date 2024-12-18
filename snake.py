@@ -53,11 +53,9 @@ def create_text_and_rect(text, color, background_color, **locations):
 title_text, text_rect = create_text_and_rect("~~Snake~~", GREEN, DARKRED,
                                              center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
 
-
-create_text_and_rect, score_rect = create_text_and_rect("Score:" + str(score), GREEN, DARKRED, topleft = (10,10))
-game_over_text, game_over_rect = create_text_and_rect("GAMEOVER", RED, DARKGREEN, center= (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-
-continue_text, continue_rect = create_text_and_rect("Press any key to play again", RED, DARKGREEN, center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64) )
+score_text, score_rect = create_text_and_rect("Score:" + str(score), GREEN, DARKRED, topleft=(10, 10))
+game_over_text, game_over_rect = create_text_and_rect("GAMEOVER",RED, DARKGREEN, center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)),
+continue_text, continue_rect = create_text_and_rect("Press any key to play again", RED, DARKGREEN, center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 64)),
 
 
 # Set sounds and music
@@ -157,39 +155,38 @@ def check_game_over():
         is_paused = True
 
         while is_paused:
-            for event in pygame.event.get()
-
-        reset_game_after_game_over(event)
-        check_end_game_after_game_over(event)
+            for event in pygame.event.get():
+                reset_game_after_game_over(event)
+                check_end_game_after_game_over(event)
 
 
 def check_collisions():
     global score, apple_x, apple_y, apple_coord, body_coords
-    # TODO: if head_rect.colliderect(apple_rect)
-        # TODO: add 1 to the score
-        # TODO: call pick_up_sound.play()
-        # TODO: set apple_x to random.randint(0, WINDOW_WIDTH - SNAKE_SIZE)
-        # TODO: set apple_y to random.randint(0, WINDOW_HEIGHT - SNAKE_SIZE)
-        # TODO: set apple_coord to (apple_x, apple_y, SNAKE_SIZE, SNAKE_SIZE)
-        # TODO: call body_coords.append(head_coord)
-        pass # TODO: remove this pass when done.
+    if head_rect.colliderect(apple_rect):
+        score += 1
+        pick_up_sound.play()
+        apple_x = random.randint(0, WINDOW_WIDTH - SNAKE_SIZE)
+        apple_y = random.randint(0, WINDOW_HEIGHT - SNAKE_SIZE)
+        apple_coord = (apple_x, apple_y, SNAKE_SIZE, SNAKE_SIZE)
+        body_coords.append(head_coord)
+
 
 def blit_hud():
-    # TODO: call display_surface.blit(title_text, title_rect)
-    # TODO: call display_surface.blit(score_text, score_rect)
-    pass  # TODO: remove this pass when done.
+    display_surface.blit(title_text, title_rect)
+    display_surface.blit(score_text, score_rect)
+
 
 def blit_assets():
-    # TODO: for body in body_coords:
-        # TODO: call pygame.draw.rect(display_surface, DARKGREEN, body)
-    # TODO: set head_rect to pygame.draw.rect(display_surface, GREEN, head_coord)
-    # TODO: set apple_rect to pygame.draw.rect(display_surface, RED, apple_coord)
-    pass  # TODO: remove this pass when done.
+    for body in body_coords:
+        pygame.draw.rect(display_surface, DARKGREEN, body)
+        head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
+        apple_rect = pygame.draw.rect(display_surface, RED, apple_coord)
+
 
 def update_display_and_tick_clock():
-    # TODO: call pygame.display.update()
-    # TODO: call clock.tick(FPS)
-    pass  # TODO: remove this pass when done.
+    pygame.display.update()
+    clock.tick(FPS)
+
 
 while running:
     # Check pygame events
@@ -205,10 +202,10 @@ while running:
     check_collisions()
 
     # Update HUD
-    # TODO: set score_text to font.render("Score: " + str(score), True, GREEN, DARKRED)
+    score_text = font.render("Score: " + str(score), True, GREEN, DARKRED)
 
     # Fill the surface
-    # TODO: call display_surface.fill(WHITE)
+    display_surface.fill(WHITE)
 
     # Blit HUD
     blit_hud()
